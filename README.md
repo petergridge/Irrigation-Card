@@ -9,10 +9,11 @@ This card works with https://github.com/petergridge/irrigation_component_v4 and 
 * add the resource */local/irrigation-card.js*
 
 ## Configuration
-Add a manual card and use configuration.
 
 **type:** custom:irrigation-card
-**program:** The switch representation of the irrigation program 
+
+**program:** The switch representation of the irrigation program
+
 **title:** The title to be set in the card. defaults to the program freindly name
 
 **Example:**
