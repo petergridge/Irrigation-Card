@@ -26,3 +26,5 @@ title: Afternoon Program
 ## REVISION HISTORY
 ### 1.0.0
 * New repository
+### 1.0.1
+* Updated error handling. More robust when incorrect object defined
