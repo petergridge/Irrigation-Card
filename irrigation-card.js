@@ -16,96 +16,119 @@ class IrrigationCard extends HTMLElement {
   }
 
   set hass(hass) {
-	const monthNames = ["January", "February", "March", "April", "May", "June",
-	  "July", "August", "September", "October", "November", "December"
-	];
-
     const config = this._config;
-    if (!hass.states[config.program]) {
-      throw new Error(`${config.program} not found`);
-    }
+	const monthNames = ["January", "February", "March", "April", "May", "June",
+	  "July", "August", "September", "October", "November", "December"];
 
-    if (config.title) {
-		config.card.title = config.title;
-	}
-	else
-	{
-      config.card.title = hass.states[config.program].attributes['friendly_name'];
-    }
+	config.card.title = config.title;
 	config.card.show_header_toggle = false;
 	config.card.state_color = true;
+	let defentities = [];
+	let validconfig = 'invalid';
 
-    let entities = [config.program];
+	const x = hass.states[config.program];
+	if (!x) {
+		config.card.title = 'ERR';
+		validconfig == 'invalid'
+		defentities.push({ 
+						type: 'section', 
+						label: 'Program: not found'
+						});
+		config.card.title = 'ERROR: ' + config.program;
+	} else {
+		validconfig = 'valid';
+    } 
+
+	if (validconfig === 'valid') {
+		if (!hass.states[config.program].attributes['zone_count']) {
+			defentities.push({ 
+							type: 'section', 
+							label: 'Program: not v4 or newer irriation component'
+							});
+			config.card.title = 'ERROR: ' + config.program;
+			validconfig = 'invalid';
+		}
+	}
 	
-	entities.push(hass.states[config.program].attributes['start_time']);
-	
-	if(hass.states[config.program].attributes['irrigation_on']) {
-		entities.push(hass.states[config.program].attributes['irrigation_on']);
-	}
-	if(hass.states[config.program].attributes['run_freq']) {
-		entities.push(hass.states[config.program].attributes['run_freq']);
-	}
-	if(hass.states[config.program].attributes['controller_monitor']) {
-		entities.push(hass.states[config.program].attributes['controller_monitor']);
-	}
+	function cardentities(hass, program) {
+		let entities = []
+		entities.push(program);
+		entities.push(hass.states[program].attributes['start_time']);
+		if(hass.states[config.program].attributes['irrigation_on']) {
+			entities.push(hass.states[config.program].attributes['irrigation_on']);
+		}
+		if(hass.states[config.program].attributes['run_freq']) {
+			entities.push(hass.states[config.program].attributes['run_freq']);
+		}
+		if(hass.states[config.program].attributes['controller_monitor']) {
+			entities.push(hass.states[config.program].attributes['controller_monitor']);
+		}
 
-	entities.push({ type: 'conditional', 
-					conditions: [{entity: config.program, state: 'on'}],
-					row: {type: 'attribute', 
-						entity: config.program, 
-						attribute: 'remaining', 
-						name: 'Remaining', 
-						icon: 'mdi:timer-outline' } 
-				});
-
-	let zones = Number(hass.states[config.program].attributes['zone_count'])
-
-	for (let i = 1; i < zones + 1; i++) {
-
-		let n = 1;
-		
-		let rundate = new Date(hass.states[config.program].attributes['zone' + String(i) + '_last_ran']);
-		let outputdate = monthNames[rundate.getMonth()]
-						+ ' ' 
-						+ rundate.getDate() 
-						+ ', ' 
-						+ rundate.getYear()
-						+ ', ' 
-						+ rundate.getHours() + ':' + rundate.getMinutes();	
-
-		entities.push({ type: 'section', 
-						label: hass.states[config.program].attributes['zone' + String(i) + '_name'] 
+		entities.push({ type: 'conditional', 
+						conditions: [{entity: config.program, state: 'on'}],
+						row: {type: 'attribute', 
+							entity: config.program, 
+							attribute: 'remaining', 
+							name: 'Remaining', 
+							icon: 'mdi:timer-outline' } 
 					});
-		
-		entities.push({ type: 'attribute',
-						entity: config.program, 
-						attribute: 'zone' + String(i) + '_last_ran', 
-						name: 'Last Ran', icon: 'mdi:clock' });
-		
-		if(hass.states[config.program].attributes['zone' + String(i) + '_water']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_water']);
+
+		let zones = Number(hass.states[config.program].attributes['zone_count'])
+
+		for (let i = 1; i < zones + 1; i++) {
+
+			let n = 1;
+			
+			let rundate = new Date(hass.states[config.program].attributes['zone' + String(i) + '_last_ran']);
+			let outputdate = monthNames[rundate.getMonth()]
+							+ ' ' 
+							+ rundate.getDate() 
+							+ ', ' 
+							+ rundate.getYear()
+							+ ', ' 
+							+ rundate.getHours() + ':' + rundate.getMinutes();	
+
+			entities.push({ type: 'section', 
+							label: hass.states[config.program].attributes['zone' + String(i) + '_name'] 
+						});
+			
+			entities.push({ type: 'attribute',
+							entity: config.program, 
+							attribute: 'zone' + String(i) + '_last_ran', 
+							name: 'Last Ran', icon: 'mdi:clock' });
+			
+			if(hass.states[config.program].attributes['zone' + String(i) + '_water']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_water']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_water_adjustment']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_water_adjustment']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_wait']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_wait']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_repeat']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_repeat']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_bool']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_sensor']);
+			}
+			if(hass.states[config.program].attributes['zone' + String(i) + '_run_freq']) {
+				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_run_freq']);
+			} 
 		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_water_adjustment']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_water_adjustment']);
-		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_wait']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_wait']);
-		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_repeat']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_repeat']);
-		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']);
-		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_bool']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_sensor']);
-		}
-		if(hass.states[config.program].attributes['zone' + String(i) + '_run_freq']) {
-			entities.push(hass.states[config.program].attributes['zone' + String(i) + '_run_freq']);
-		} 
+		return entities;
+	}
+	
+	if (validconfig === 'valid') {
+		config.card.entities = cardentities(hass, config.program);
+	}
+	else {
+		config.card.entities = defentities;
 	}
 
-	config.card.entities = entities;
 	this.lastChild.setConfig(config.card);
 	this.lastChild.hass = hass;
 
