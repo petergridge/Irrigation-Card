@@ -6,7 +6,7 @@ This card works with https://github.com/petergridge/irrigation_component_v4 and 
 * Ensure you have advanced mode enabled in Home Assistant
 * Copy irrigation-card.js to the /config/www directory in Home Assistant
 * In the *configuration/LoveLace* dashboards page select the *Resources* tab
-* Add the resource */local/irrigation-card.js*
+* Add the resource */local/irrigation-card.js?v=1* increment the version number if updating an exsting installation
 * Add a manual card with the definition below
 
 ## Configuration
@@ -25,7 +25,9 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
-### 1.0.0
-* New repository
+### 1.0.2
+* Fixed missing config objected
 ### 1.0.1
 * Updated error handling. More robust when incorrect object defined
+### 1.0.0
+* New repository
