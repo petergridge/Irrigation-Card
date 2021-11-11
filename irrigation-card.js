@@ -112,7 +112,7 @@ class IrrigationCard extends HTMLElement {
 			if(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']) {
 				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_rain_sensor']);
 			}
-			if(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_bool']) {
+			if(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_sensor']) {
 				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_ignore_rain_sensor']);
 			}
 			if(hass.states[config.program].attributes['zone' + String(i) + '_run_freq']) {
