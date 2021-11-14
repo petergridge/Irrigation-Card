@@ -28,7 +28,7 @@ title: Afternoon Program
 ### 1.0.3
 * Register card so it appears on the list of cards
 ### 1.0.2
-* Fixed missing config objected
+* Fixed missing config objects
 ### 1.0.1
 * Updated error handling. More robust when incorrect object defined
 ### 1.0.0
