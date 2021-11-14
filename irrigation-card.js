@@ -1,5 +1,6 @@
-class IrrigationCard extends HTMLElement {
 
+class IrrigationCard extends HTMLElement {
+  
   setConfig(config) {
     if (!config.program) {
       throw new Error('Please specify an irrigation program');
@@ -78,25 +79,16 @@ class IrrigationCard extends HTMLElement {
 		for (let i = 1; i < zones + 1; i++) {
 
 			let n = 1;
-			
-			let rundate = new Date(hass.states[config.program].attributes['zone' + String(i) + '_last_ran']);
-			let outputdate = monthNames[rundate.getMonth()]
-							+ ' ' 
-							+ rundate.getDate() 
-							+ ', ' 
-							+ rundate.getYear()
-							+ ', ' 
-							+ rundate.getHours() + ':' + rundate.getMinutes();	
 
 			entities.push({ type: 'section', 
 							label: hass.states[config.program].attributes['zone' + String(i) + '_name'] 
 						});
-			
+
 			entities.push({ type: 'attribute',
 							entity: config.program, 
 							attribute: 'zone' + String(i) + '_last_ran', 
 							name: 'Last Ran', icon: 'mdi:clock' });
-			
+
 			if(hass.states[config.program].attributes['zone' + String(i) + '_water']) {
 				entities.push(hass.states[config.program].attributes['zone' + String(i) + '_water']);
 			}
@@ -140,3 +132,10 @@ class IrrigationCard extends HTMLElement {
 }
 
 customElements.define('irrigation-card', IrrigationCard);
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "irrigation-card",
+  name: "Irrigation Card",
+  preview: true, // Optional - defaults to false
+  description: "Custom card companion to Irrigation Custom COmponent" // Optional
+});
