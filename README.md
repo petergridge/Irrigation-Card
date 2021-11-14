@@ -25,6 +25,8 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 1.0.3
+* Register card so it appears on the list of cards
 ### 1.0.2
 * Fixed missing config objected
 ### 1.0.1
