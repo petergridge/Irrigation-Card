@@ -84,6 +84,17 @@ class IrrigationCard extends HTMLElement {
 							label: hass.states[config.program].attributes['zone' + String(i) + '_name'] 
 						});
 
+			if(hass.states[config.program].attributes['zone' + String(i) + '_remaining']) {
+				entities.push({ type: 'conditional', 
+								conditions: [{entity: config.program, state: 'on'}],
+								row: {type: 'attribute', 
+									entity: config.program, 
+									attribute: 'zone' + String(i) + '_remaining', 
+									name: 'Remaining', 
+									icon: 'mdi:timer-outline' } 
+							});
+			}
+
 			entities.push({ type: 'attribute',
 							entity: config.program, 
 							attribute: 'zone' + String(i) + '_last_ran', 
