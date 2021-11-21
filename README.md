@@ -23,8 +23,13 @@ type: custom:irrigation-card
 program: switch.afternoon
 title: Afternoon Program
 ```
+## Planned
+* Simple view, only show information attributes not configuration attributes, can manually start the program
+* Read only view, all data but cannot change the configuration, can manually start the program
 
 ## REVISION HISTORY
+### 1.0.4
+* Add zone level remaining run time
 ### 1.0.3
 * Register card so it appears on the list of cards
 ### 1.0.2
