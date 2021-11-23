@@ -1,4 +1,4 @@
-# Irrigation Custom Card for Irrigation Component V4 <img src="icon.png" alt="drawing" width="75"/>
+# Custom Card for Irrigation Component V4 <img src="icon.png" alt="drawing" width="75"/>
 
 This card works with https://github.com/petergridge/irrigation_component_v4 and provides an interface reflecting the configuration of the irrigation custom component.
 
