@@ -11,11 +11,11 @@ This card works with https://github.com/petergridge/irrigation_component_v4 and 
 
 ## Configuration
 
-**type:** custom:irrigation-card
+**type:** (required) custom:irrigation-card
 
-**program:** The switch representation of the irrigation program
+**program:** (required) The switch representation of the irrigation program
 
-**title:** The title to be set in the card. defaults to the program freindly name
+**title:** (optional) The title to be set in the card. defaults to the program freindly name
 
 **Example:**
 ```yaml
@@ -28,6 +28,9 @@ title: Afternoon Program
 * Read only view, all data but cannot change the configuration, can manually start the program
 
 ## REVISION HISTORY
+### 1.0.5
+* Improve code 
+* add conditonal display of remainin time/last ran
 ### 1.0.4
 * Add zone level remaining run time
 ### 1.0.3
