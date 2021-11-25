@@ -56,6 +56,32 @@ class IrrigationCard extends HTMLElement {
 				  entities.push(hass.states[config.program].attributes[p_entity]);
 			  }
 		  }
+
+		  function add_button(p_entity, p_zone) {
+
+			entities.push({ 
+						  type: 'conditional',
+						  conditions: [{entity: p_entity, state: 'off'}],
+						  row: 
+						    {
+							type: 'button',
+							name: p_zone,
+							icon: 'mdi:power',
+							action_name: 'Run Zone',
+							tap_action: 
+							  {
+							  action: 'call-service',
+							  service: 'irrigationprogram.run_zone',
+							  service_data: 
+							    {
+							    entity_id: p_entity,
+							    zone: p_zone
+								}
+							  }
+							}
+						  });
+		  }
+
   
 		  function add_conditional_entity(p_conditions, p_entity) {
 			  if(hass.states[config.program].attributes[p_entity]) {
@@ -109,6 +135,10 @@ class IrrigationCard extends HTMLElement {
   
 			  add_conditional_attribute([{entity: config.program, state: 'on'}], 'zone' + String(i) + '_remaining', 'Remaining', 'mdi:timer-outline');
 			  add_conditional_attribute([{entity: config.program, state: 'off'}], 'zone' + String(i) + '_last_ran', 'Last Ran', 'mdi:clock');
+
+			  add_button(program,
+						hass.states[config.program].attributes['zone' + String(i) + '_name'], 
+						);
   
 			  
 			  add_entity('zone' + String(i) + '_run_freq');
