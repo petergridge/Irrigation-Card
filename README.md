@@ -28,6 +28,8 @@ title: Afternoon Program
 * Read only view, all data but cannot change the configuration, can manually start the program
 
 ## REVISION HISTORY
+### 1.0.6
+* Add run zone functionality
 ### 1.0.5
 * Improve code 
 * add conditonal display of remainin time/last ran
