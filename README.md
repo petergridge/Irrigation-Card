@@ -39,7 +39,7 @@ title: Afternoon Program
 * Add run zone functionality
 ### 1.0.5
 * Improve code 
-* add conditonal display of remainin time/last ran
+* add conditonal display of remaining time/last ran
 ### 1.0.4
 * Add zone level remaining run time
 ### 1.0.3
