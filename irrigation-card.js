@@ -19,6 +19,9 @@ class IrrigationCard extends HTMLElement {
 	  const config = this._config;
 
 	  config.card.title = config.title;
+	  //https://www.home-assistant.io/lovelace/header-footer/
+	  config.card.header = config.header;
+	  config.card.footer = config.footer;
 	  config.card.show_header_toggle = false;
 	  config.card.state_color = true;
 	  let defentities = [];
