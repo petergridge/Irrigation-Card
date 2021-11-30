@@ -1,6 +1,6 @@
 # Custom Card for Irrigation Component V4 <img src="https://github.com/petergridge/irrigation_card/blob/main/icon.png" alt="drawing" width="75"/>
 
-This card works with [Irrigation Component](https://github.com/petergridge/irrigation_component_v4) and provides an interface reflecting the configuration of the irrigation custom component.
+This card works with [Irrigation Component](https://github.com/petergridge/irrigation_component_v4) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, this card utilises the capabilities of the default entities card.
 
 ## Installation
 HACS installation
@@ -20,6 +20,10 @@ Manual install
 **program:** (required) The switch representation of the irrigation program
 
 **title:** (optional) The title to be set in the card. defaults to the program freindly name
+
+**icon:** (optional) An icon to display to the left of the title.
+
+**theme:** (optional) Override the used theme for this card with any loaded theme. For more information about themes, see the [frontend documentation](https://www.home-assistant.io/integrations/frontend/).
 
 **header:** (optional) Header widget to render an image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
 
