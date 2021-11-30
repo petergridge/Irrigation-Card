@@ -3,6 +3,10 @@
 This card works with https://github.com/petergridge/irrigation_component_v4 and provides an interface reflecting the configuration of the irrigation custom component.
 
 ## Installation
+HACS installation
+* Will be available on HACS soon but you can add it a custom repository.
+
+Manual install
 * Ensure you have advanced mode enabled in Home Assistant
 * Copy irrigation-card.js to the /config/www directory in Home Assistant
 * In the *configuration/LoveLace* dashboards page select the *Resources* tab
@@ -17,17 +21,20 @@ This card works with https://github.com/petergridge/irrigation_component_v4 and 
 
 **title:** (optional) The title to be set in the card. defaults to the program freindly name
 
+**header:** (optional) Header widget to render an image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
+
+**footer:** (optional) Header widget to render and image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
+
 **Example:**
 ```yaml
 type: custom:irrigation-card
 program: switch.afternoon
 title: Afternoon Program
 ```
-## Planned
-* Simple view, only show information attributes not configuration attributes, can manually start the program
-* Read only view, all data but cannot change the configuration, can manually start the program
 
 ## REVISION HISTORY
+### 1.0.7
+* Add header and footer capability
 ### 1.0.6
 * Add run zone functionality
 ### 1.0.5
