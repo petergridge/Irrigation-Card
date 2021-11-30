@@ -1,6 +1,6 @@
 # Custom Card for Irrigation Component V4 <img src="https://github.com/petergridge/irrigation_card/blob/main/icon.png" alt="drawing" width="75"/>
 
-This card works with https://github.com/petergridge/irrigation_component_v4 and provides an interface reflecting the configuration of the irrigation custom component.
+This card works with [Irrigation Component](https://github.com/petergridge/irrigation_component_v4) and provides an interface reflecting the configuration of the irrigation custom component.
 
 ## Installation
 HACS installation
