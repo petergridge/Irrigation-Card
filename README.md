@@ -37,6 +37,8 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 1.0.8
+* Add ability to hide/show configuration
 ### 1.0.7
 * Add header and footer capability
 ### 1.0.6
