@@ -132,13 +132,21 @@ class IrrigationCard extends HTMLElement {
 			},
 			[{entity: program, state: 'on'}]);
 
-		  add_conditional_entity([{entity: config.program, state: 'off'}], 'start_time')
 		  add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 
-		  add_entity('irrigation_on');
-		  add_entity('run_freq');
-		  add_entity('controller_monitor');
+			add_entity('show_config');
 
+			if(hass.states[config.program].attributes['show_config']) {
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'start_time');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'irrigation_on');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'run_freq');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'controller_monitor');
+			} else {
+				add_entity('start_time');
+				add_entity('irrigation_on');
+				add_entity('run_freq');
+				add_entity('controller_monitor');
+			}
 
 		  let zones = Number(hass.states[config.program].attributes['zone_count'])
 
@@ -151,8 +159,12 @@ class IrrigationCard extends HTMLElement {
 						  });
 
 			  add_attribute( 'zone' + String(i) + '_remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
-			  add_attribute( 'zone' + String(i) + '_last_ran', 'Last Ran', 'mdi:clock', [{entity: config.program, state: 'off'}]);
-
+			  if(hass.states[config.program].attributes['show_config']) {
+					add_attribute( 'zone' + String(i) + '_last_ran', 'Last Ran', 'mdi:clock', [{entity: hass.states[config.program].attributes['show_config'], state: 'on'}]);
+				} else {
+					add_attribute( 'zone' + String(i) + '_last_ran', 'Last Ran', 'mdi:clock', [{entity: config.program, state: 'off'}]);
+				}
+				
 			  add_button_service(
 				'irrigationprogram.run_zone',
 				hass.states[config.program].attributes['zone' + String(i) + '_name'],
@@ -163,15 +175,25 @@ class IrrigationCard extends HTMLElement {
 				},
 				[{entity: program, state: 'off'}]);
 
-			  add_entity('zone' + String(i) + '_run_freq');
-			  add_entity('zone' + String(i) + '_disable_zone');
-			  add_entity('zone' + String(i) + '_water');
-			  add_entity('zone' + String(i) + '_water_adjustment');
-			  add_entity('zone' + String(i) + '_wait');
-			  add_entity('zone' + String(i) + '_repeat');
-			  add_entity('zone' + String(i) + '_rain_sensor');
-			  add_entity('zone' + String(i) + '_ignore_rain_sensor');
-
+			  if(hass.states[config.program].attributes['show_config']) {
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_run_freq');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_disable_zone');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_water');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_water_adjustment');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_wait');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_repeat');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_rain_sensor');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_ignore_rain_sensor');
+				} else {
+					add_entity('zone' + String(i) + '_run_freq');
+					add_entity('zone' + String(i) + '_disable_zone');
+					add_entity('zone' + String(i) + '_water');
+					add_entity('zone' + String(i) + '_water_adjustment');
+					add_entity('zone' + String(i) + '_wait');
+					add_entity('zone' + String(i) + '_repeat');
+					add_entity('zone' + String(i) + '_rain_sensor');
+					add_entity('zone' + String(i) + '_ignore_rain_sensor');
+				}
 		  }
 		  return entities;
 	  }
