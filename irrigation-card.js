@@ -178,6 +178,7 @@ class IrrigationCard extends HTMLElement {
 			  if(hass.states[config.program].attributes['show_config']) {
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_run_freq');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_disable_zone');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_enable_zone');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_water');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_water_adjustment');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_wait');
@@ -187,6 +188,7 @@ class IrrigationCard extends HTMLElement {
 				} else {
 					add_entity('zone' + String(i) + '_run_freq');
 					add_entity('zone' + String(i) + '_disable_zone');
+					add_entity('zone' + String(i) + '_enable_zone');
 					add_entity('zone' + String(i) + '_water');
 					add_entity('zone' + String(i) + '_water_adjustment');
 					add_entity('zone' + String(i) + '_wait');
