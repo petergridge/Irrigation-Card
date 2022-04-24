@@ -37,6 +37,8 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 1.0.11
+* Enable Zone functionality. Prerequisite is V4.0.11 of Irrigation Component V4 to support the 
 ### 1.0.8
 * Add ability to hide/show configuration. Prerequisite is V4.0.8 of Irrigation Component V4 to support the 
 ### 1.0.7
