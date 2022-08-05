@@ -132,7 +132,7 @@ class IrrigationCard extends HTMLElement {
 			},
 			[{entity: program, state: 'on'}]);
 
-		  add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
+//		  add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 
 			add_entity('show_config');
 
@@ -141,11 +141,15 @@ class IrrigationCard extends HTMLElement {
 				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'irrigation_on');
 				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'run_freq');
 				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'controller_monitor');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'inter_zone_delay');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone_groups');
 			} else {
 				add_entity('start_time');
 				add_entity('irrigation_on');
 				add_entity('run_freq');
 				add_entity('controller_monitor');
+				add_entity('inter_zone_delay');
+				add_entity('zone_groups');
 			}
 
 		  let zones = Number(hass.states[config.program].attributes['zone_count'])
@@ -177,6 +181,7 @@ class IrrigationCard extends HTMLElement {
 
 			  if(hass.states[config.program].attributes['show_config']) {
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_run_freq');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_zone_group');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_disable_zone');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_enable_zone');
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_water');
@@ -187,6 +192,7 @@ class IrrigationCard extends HTMLElement {
 					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone' + String(i) + '_ignore_rain_sensor');
 				} else {
 					add_entity('zone' + String(i) + '_run_freq');
+					add_entity('zone' + String(i) + '_zone_group');
 					add_entity('zone' + String(i) + '_disable_zone');
 					add_entity('zone' + String(i) + '_enable_zone');
 					add_entity('zone' + String(i) + '_water');
