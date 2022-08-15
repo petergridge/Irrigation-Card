@@ -1,6 +1,6 @@
-# Custom Card for Irrigation Component V4 <img src="https://github.com/petergridge/irrigation_card/blob/main/icon.png" alt="drawing" width="75"/>
+# Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation_card/blob/main/icon.png" alt="drawing" width="75"/>
 
-This card works with [Irrigation Component](https://github.com/petergridge/irrigation_component_v4) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, the card leverages the capabilities of the default entities card.
+This card works with [Irrigation Component](https://github.com/petergridge/irrigation_component_v5) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, the card leverages the capabilities of the default entities card.
 
 ## Installation
 HACS installation
@@ -37,6 +37,9 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 5.0.0
+* Refactored to work with Irrigation component V5
+* is not compatible with Irrigation component V4 use v1.0.11.
 ### 1.0.11
 * Enable Zone functionality. Prerequisite is V4.0.11 of Irrigation Component V4 to support the 
 ### 1.0.8
