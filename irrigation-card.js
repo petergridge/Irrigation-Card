@@ -157,7 +157,8 @@ class IrrigationCard extends HTMLElement {
 			config.card.title = hass.states[config.program].attributes['friendly_name'];
 
 			let friendly_name = slugify(hass.states[config.program].attributes['friendly_name'])
-			let show_config = 'input_boolean.' + friendly_name + '_show_config'
+			let name = config.program.split(".")[1]
+			let show_config = 'input_boolean.' + name + '_show_config'
 			if(hass.states[config.program].attributes['controller_monitor']) {
 				entities.push({ type: 'conditional',
 								conditions: [{entity: hass.states[config.program].attributes['controller_monitor'], state: 'off'}],
@@ -173,7 +174,7 @@ class IrrigationCard extends HTMLElement {
 					entity_id: program,
 					},
 					[{entity: program, state: 'off'},
-					 {entity: 'input_boolean.' +friendly_name+'_irrigation_on', state: 'on'},
+					 {entity: 'input_boolean.' +name+'_irrigation_on', state: 'on'},
 					 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}
 					 ]);
 			} else {
@@ -185,7 +186,7 @@ class IrrigationCard extends HTMLElement {
 					entity_id: program,
 					},
 					[{entity: program, state: 'off'},
-					 {entity: 'input_boolean.' + friendly_name + '_irrigation_on', state: 'on'}
+					 {entity: 'input_boolean.' + name + '_irrigation_on', state: 'on'}
 					]);
 			}				
 	
@@ -201,11 +202,11 @@ class IrrigationCard extends HTMLElement {
 //add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 			add_known_entity(show_config);
 
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_datetime.'+friendly_name+'_start_time');
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_boolean.' +friendly_name+'_irrigation_on');
+			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_datetime.'+name+'_start_time');
+			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_boolean.' +name+'_irrigation_on');
 			add_conditional_entity([{entity: show_config, state: 'on'}],'run_freq');
 			add_conditional_entity([{entity: show_config, state: 'on'}],'controller_monitor');
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_number.'+friendly_name+'_inter_zone_delay');
+			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_number.'+name+'_inter_zone_delay');
 
 
 				entities.push({ type: 'conditional',
@@ -221,7 +222,7 @@ class IrrigationCard extends HTMLElement {
 
 			  let n = 1;
 				let zname = hass.states[config.program].attributes['zone' + String(i) + '_name'];
-				let zpath = slugify(friendly_name + '_' + zname)
+				let zpath = slugify(name + '_' + zname)
 				let iboolean = 'input_boolean.' + zpath;
 				let itext    = 'input_text.'    + zpath;
 				let inumber  = 'input_number.'  + zpath;
@@ -255,7 +256,7 @@ class IrrigationCard extends HTMLElement {
 						},
 						[{entity: program, state: 'off'},
 						 {entity: iboolean + '_enable_zone', state: 'on'},
-						 {entity: 'input_boolean.' +friendly_name+'_irrigation_on', state: 'on'},
+						 {entity: iboolean +'_irrigation_on', state: 'on'},
 						 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}]);
 				 } else {
 					entities.push({ type: 'conditional',
@@ -279,7 +280,7 @@ class IrrigationCard extends HTMLElement {
 						},
 						[{entity: program, state: 'off'},
 						 {entity: iboolean + '_enable_zone', state: 'on'},
-						 {entity: 'input_boolean.' +friendly_name+'_irrigation_on', state: 'on'}]);
+						 {entity: 'input_boolean.' +name+'_irrigation_on', state: 'on'}]);
 				}	
 				
 				
