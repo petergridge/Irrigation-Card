@@ -56,40 +56,6 @@ class IrrigationCard extends HTMLElement {
 	  function cardentities(hass, program) {
 		  let entities = []
 
-			function slugify(str)
-			{
-				str = str.toLowerCase();
-				str = str.replace(/[^a-z0-9_.]/g, ' '); // remove unexpected
-				str = str.replace(/^\s+|\s+$/g, ''); // trim
-   		  str = str.replace(/\s+/g, '_'); 
-        return str;
-			}
-
-			function sentencecase(str)
-			{
-				str = str.charAt(0).toUpperCase() + str.slice(1);
-				var from = "_";
-				var to   = " ";
-				for (var i=0, l=from.length ; i<l ; i++) {
-						str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-				}
-				return str;
-			}
-
-
-		  function add_entity(p_entity) {
-			  if(hass.states[config.program].attributes[p_entity]) {
-				  entities.push(hass.states[config.program].attributes[p_entity]);
-			  }
-		  }
-		  function add_known_entity(p_entity) {
-				let a = slugify(p_entity)
-//				let a = p_entity
-			  if(hass.states[a]) {
-				  entities.push(a);
-				}
-		  }
-
 		  function add_button_service(p_service, p_name, p_action_name, p_data, p_conditions) {
 			entities.push({
 						  type: 'conditional',
@@ -112,6 +78,12 @@ class IrrigationCard extends HTMLElement {
 		  }
 
 
+		  function add_entity(p_entity) {
+			  if(hass.states[config.program].attributes[p_entity]) {
+				  entities.push(hass.states[config.program].attributes[p_entity]);
+			  }
+		  }
+
 		  function add_conditional_entity(p_conditions, p_entity) {
 			  if(hass.states[config.program].attributes[p_entity]) {
 				  entities.push({ type: 'conditional',
@@ -120,22 +92,10 @@ class IrrigationCard extends HTMLElement {
 							  });
 			  }
 		  }
-		  function add_known_conditional_entity(p_conditions, p_entity) {
-        let a = slugify(p_entity)
-//        let a = p_entity
-			  if(hass.states[a]) {
-					if (hass.states[a].state != 'unavailable') {
-						entities.push({ type: 'conditional',
-										conditions: p_conditions,
-										row: {entity: a}
-									});
-					}
-				}
-		  }
 
 		  function add_attribute(p_attribute, p_name, p_icon, p_conditions) {
 			  if(hass.states[config.program].attributes[p_attribute]) {
-          if(p_conditions == null) {
+                if(p_conditions == null) {
     			  entities.push({ type: 'attribute',
 					  entity: config.program,
 					  attribute: p_attribute,
@@ -154,42 +114,15 @@ class IrrigationCard extends HTMLElement {
 			  }
 		  }
 
-			config.card.title = hass.states[config.program].attributes['friendly_name'];
-
-			let friendly_name = slugify(hass.states[config.program].attributes['friendly_name'])
-			let name = config.program.split(".")[1]
-			let show_config = 'input_boolean.' + name + '_show_config'
-			if(hass.states[config.program].attributes['controller_monitor']) {
-				entities.push({ type: 'conditional',
-								conditions: [{entity: hass.states[config.program].attributes['controller_monitor'], state: 'off'}],
-								row: {type: 'section',
-											label: "Off-line!"}
-								});
-
-				add_button_service(
-					'switch.turn_on',
-					hass.states[config.program].attributes['friendly_name'],
-					'Run Program',
-					{
-					entity_id: program,
-					},
-					[{entity: program, state: 'off'},
-					 {entity: 'input_boolean.' +name+'_irrigation_on', state: 'on'},
-					 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}
-					 ]);
-			} else {
-				add_button_service(
-					'switch.turn_on',
-					hass.states[config.program].attributes['friendly_name'],
-					'Run Program',
-					{
-					entity_id: program,
-					},
-					[{entity: program, state: 'off'},
-					 {entity: 'input_boolean.' + name + '_irrigation_on', state: 'on'}
-					]);
-			}				
-	
+		  add_button_service(
+			'switch.turn_on',
+			hass.states[config.program].attributes['friendly_name'],
+			'Run Program',
+			{
+			entity_id: program,
+			},
+			[{entity: program, state: 'off'}]);
+			
 		  add_button_service(
 			'switch.turn_off',
 			hass.states[config.program].attributes['friendly_name'],
@@ -199,111 +132,77 @@ class IrrigationCard extends HTMLElement {
 			},
 			[{entity: program, state: 'on'}]);
 
-//add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
-			add_known_entity(show_config);
+//		  add_attribute('remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_datetime.'+name+'_start_time');
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_boolean.' +name+'_irrigation_on');
-			add_conditional_entity([{entity: show_config, state: 'on'}],'run_freq');
-			add_conditional_entity([{entity: show_config, state: 'on'}],'controller_monitor');
-			add_known_conditional_entity([{entity: show_config, state: 'on'}],'input_number.'+name+'_inter_zone_delay');
+			add_entity('show_config');
 
-
-				entities.push({ type: 'conditional',
-								conditions: [{entity: show_config, state: 'on'}],
-								row: {type: 'section',
-											label: 'Zones'}
-							  });
-
+			if(hass.states[config.program].attributes['show_config']) {
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'start_time');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'irrigation_on');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'run_freq');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'controller_monitor');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'inter_zone_delay');
+				add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],'zone_groups');
+			} else {
+				add_entity('start_time');
+				add_entity('irrigation_on');
+				add_entity('run_freq');
+				add_entity('controller_monitor');
+				add_entity('inter_zone_delay');
+				add_entity('zone_groups');
+			}
 
 		  let zones = Number(hass.states[config.program].attributes['zone_count'])
-
+							
 		  for (let i = 1; i < zones + 1; i++) {
 
 			  let n = 1;
 				let zname = hass.states[config.program].attributes['zone' + String(i) + '_name'];
-				let zpath = slugify(name + '_' + zname)
-				let iboolean = 'input_boolean.' + zpath;
-				let itext    = 'input_text.'    + zpath;
-				let inumber  = 'input_number.'  + zpath;
 
-				if(hass.states[config.program].attributes['controller_monitor']) {
-					entities.push({ type: 'conditional',
-									conditions: [{entity: show_config, state: 'on'},
-															 {entity: iboolean + '_enable_zone', state: 'on'},
-															 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}],
-									row: {type: 'section',
-												label: ''}
-									});
-					entities.push({ type: 'conditional',
-									conditions: [{entity: hass.states[config.program].attributes['controller_monitor'], state: 'off'}],
-									row: {type: 'section',
-												label: sentencecase(zname)}
-									});
-					entities.push({ type: 'conditional',
-									conditions: [{entity: iboolean + '_enable_zone', state: 'off'},
-															 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}],
-									row: {type: 'section',
-												label: sentencecase(zname)}
-									});
-					add_button_service(
-						'irrigationprogram.run_zone',
-						sentencecase(zname),
-						'Run Zone',
-						{
-						entity_id: program,
-						zone: zname,
-						},
-						[{entity: program, state: 'off'},
-						 {entity: iboolean + '_enable_zone', state: 'on'},
-						 {entity: iboolean +'_irrigation_on', state: 'on'},
-						 {entity: hass.states[config.program].attributes['controller_monitor'], state: 'on'}]);
-				 } else {
-					entities.push({ type: 'conditional',
-									conditions: [{entity: show_config, state: 'on'},
-															 {entity: iboolean + '_enable_zone', state: 'on'}],
-									row: {type: 'section',
-												label: ''}
-									});
-					entities.push({ type: 'conditional',
-									conditions: [{entity: iboolean + '_enable_zone', state: 'off'}],
-									row: {type: 'section',
-												label: sentencecase(zname)}
-									});
-					add_button_service(
-						'irrigationprogram.run_zone',
-						sentencecase(zname),
-						'Run Zone',
-						{
-						entity_id: program,
-						zone: zname,
-						},
-						[{entity: program, state: 'off'},
-						 {entity: iboolean + '_enable_zone', state: 'on'},
-						 {entity: 'input_boolean.' +name+'_irrigation_on', state: 'on'}]);
-				}	
-				
-				
-				
+			  entities.push({ type: 'section',
+							  label: hass.states[config.program].attributes['Zone' + String(i) + '_name']
+						  });
 
-
-			  add_attribute(zpath + '_remaining', 
-											sentencecase(zname), 'mdi:timer-outline', 
-											[{entity: config.program, state: 'on'},{entity: iboolean + '_enable_zone', state: 'on'}]
-											);
+			  add_attribute( zname + '_remaining', 'Remaining', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
+			  if(hass.states[config.program].attributes['show_config']) {
+					add_attribute( zname + '_last_ran', 'Last Ran', 'mdi:clock', [{entity: hass.states[config.program].attributes['show_config'], state: 'on'}]);
+				} else {
+					add_attribute( zname + '_last_ran', 'Last Ran', 'mdi:clock', [{entity: config.program, state: 'off'}]);
+				}
 				
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],iboolean + '_enable_zone');
-				add_conditional_entity([{entity: show_config, state: 'on'}],zpath + '_run_freq');
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],itext + '_zone_group');
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],inumber + '_water');
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],inumber + '_wait');
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],inumber + '_repeat');
-				add_conditional_entity([{entity: show_config, state: 'on'}],zpath + '_rain_sensor');
-				add_known_conditional_entity([{entity: show_config, state: 'on'}],iboolean + '_ignore_rain_sensor');
-				add_conditional_entity([{entity: show_config, state: 'on'}],zpath + '_water_adjustment');
-				add_conditional_entity([{entity: show_config, state: 'on'}],zpath + '_flow_sensor');
-				add_attribute( zpath + '_last_ran' , 'Last Ran' , 'mdi:clock', [{entity: show_config, state: 'on'}]);
+			  add_button_service(
+				'irrigationprogram.run_zone',
+				hass.states[config.program].attributes['zone' + String(i) + '_name'],
+				'Run Zone',
+				{
+				entity_id: program,
+				zone: zname,
+				},
+				[{entity: program, state: 'off'}]);
 
+			  if(hass.states[config.program].attributes['show_config']) {
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_run_freq');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_zone_group');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_disable_zone');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_enable_zone');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_water');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_water_adjustment');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_wait');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_repeat');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_rain_sensor');
+					add_conditional_entity([{entity: hass.states[config.program].attributes['show_config'], state: 'on'}],zname + '_ignore_rain_sensor');
+				} else {
+					add_entity(zname + '_run_freq');
+					add_entity(zname + '_zone_group');
+					add_entity(zname + '_disable_zone');
+					add_entity(zname + '_enable_zone');
+					add_entity(zname + '_water');
+					add_entity(zname + '_water_adjustment');
+					add_entity(zname + '_wait');
+					add_entity(zname + '_repeat');
+					add_entity(zname + '_rain_sensor');
+					add_entity(zname + '_ignore_rain_sensor');
+				}
 		  }
 		  return entities;
 	  }
@@ -317,7 +216,6 @@ class IrrigationCard extends HTMLElement {
 
 	  this.lastChild.setConfig(config.card);
 	  this.lastChild.hass = hass;
-
 	}
 
 	getCardSize() {
@@ -331,5 +229,5 @@ class IrrigationCard extends HTMLElement {
 	type: "irrigation-card",
 	name: "Irrigation Card",
 	preview: true, // Optional - defaults to false
-	description: "Custom card companion to Irrigation Custom COmponent" // Optional
+	description: "Custom card companion to Irrigation Custom Component" // Optional
   });
