@@ -4,14 +4,20 @@ This card works with [Irrigation Component](https://github.com/petergridge/irrig
 
 ## Installation
 HACS installation
-* Will be available on HACS, you can add it a custom repository.
+* Adding the repository using HACS is the simplest approach
 
 Manual install
 * Ensure you have advanced mode enabled in Home Assistant
 * Copy irrigation-card.js to the /config/www directory in Home Assistant
 * In the *configuration/LoveLace* dashboards page select the *Resources* tab
 * Add the resource */local/irrigation-card.js?v=1* increment the version number if updating an exsting installation
-* Add a manual card with the definition below
+
+Edit your dashboard
+
+Add the custom card
+
+![image](https://user-images.githubusercontent.com/40281772/204683211-cb589ccd-0183-4b50-9b03-0d6e3ea7795e.png)
+
 
 ## Configuration
 
@@ -37,6 +43,9 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 5.1.15
+* Initial HACS release
+* Sync version with Irrigation-V5
 ### 5.0.0
 * Refactored to work with Irrigation component V5
 * is not compatible with Irrigation component V4 use v1.0.11.
