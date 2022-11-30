@@ -4,7 +4,7 @@ This card works with [Irrigation Component](https://github.com/petergridge/irrig
 
 ## Installation
 HACS installation
-* Will be available on HACS soon but you can add it a custom repository.
+* Will be available on HACS, you can add it a custom repository.
 
 Manual install
 * Ensure you have advanced mode enabled in Home Assistant
