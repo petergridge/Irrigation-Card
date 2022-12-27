@@ -44,6 +44,9 @@ title: Afternoon Program
 ```
 
 ## REVISION HISTORY
+### 5.1.16
+* Reduce english content
+* correct friendly name usage
 ### 5.1.15
 * Initial HACS release
 * Sync version with Irrigation-V5
