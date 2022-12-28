@@ -1,9 +1,8 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total?style=for-the-badge)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)  [![my_badge](https://img.shields.io/badge/Home%20Assistant-Community-41BDF5.svg?style=for-the-badge)](https://community.home-assistant.io/t/irrigation-custom-component-with-custom-card/124370)
 
-[![my_badge](https://img.shields.io/badge/Home%20Assistant-Community-41BDF5.svg?style=for-the-badge)](https://community.home-assistant.io/t/irrigation-custom-component-with-custom-card/124370)
-
-![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
-# Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="75"/>
+![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main)
+![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
+# Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="30"/>
 
 This card works with [Irrigation Component](https://github.com/petergridge/Irrigation-V5) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, the card leverages the capabilities of the default entities card.
 ![image](https://user-images.githubusercontent.com/40281772/208523674-a2bee3af-053e-4ff1-9507-6e9c1c09f395.png)
