@@ -1,6 +1,5 @@
 {
   "name": "IrrigationProgram Custom Card",
-  "content_in_root": false,
   "render_readme": true,
   "filename": "irrigation-card.js"
 }
