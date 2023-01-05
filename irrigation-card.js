@@ -127,12 +127,12 @@ class IrrigationCard extends HTMLElement {
 		  add_button_service(
 			'switch.turn_off',
 			hass.states[config.program].attributes['friendly_name'],
-			'Stop',
+			'STOP',
 			{
 			entity_id: program,
 			},
 			[{entity: program, state: 'on'}]);
-
+			add_attribute( 'remaining', ' ', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 		  add_entity('show_config');
 //add the program level configuration use conditional if show config entity is provided
           let showconfig = hass.states[config.program].attributes['show_config']
