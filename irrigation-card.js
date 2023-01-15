@@ -116,22 +116,24 @@ class IrrigationCard extends HTMLElement {
 
 // run  program button
 		  add_button_service(
-			'switch.turn_on',
-			hass.states[config.program].attributes['friendly_name'],
-			'',
-			{
-			entity_id: program,
-			},
-			[{entity: program, state: 'off'}]);
+			  'switch.turn_on',
+				hass.states[config.program].attributes['friendly_name'],
+				'RUN',
+				{
+				entity_id: config.program,
+				},
+				[{entity: config.program, state: 'off'}]
+			);
 			
 		  add_button_service(
-			'switch.turn_off',
-			hass.states[config.program].attributes['friendly_name'],
-			'STOP',
-			{
-			entity_id: program,
-			},
-			[{entity: program, state: 'on'}]);
+				'switch.turn_off',
+				hass.states[config.program].attributes['friendly_name'],
+				'STOP',
+				{
+				entity_id: config.program,
+				},
+				[{entity: config.program, state: 'on'}]
+			);
 			add_attribute( 'remaining', ' ', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
 		  add_entity('show_config');
 //add the program level configuration use conditional if show config entity is provided
@@ -178,12 +180,12 @@ class IrrigationCard extends HTMLElement {
 			  add_button_service(
 				'irrigationprogram.run_zone',
 				zfname,
-				'',
+				'RUN',
 				{
-				entity_id: program,
-				zone: zname,
+				entity_id: config.program,
+				zone: 'switch.' + zname,
 				},
-				[{entity: program, state: 'off'}]);
+				[{entity: config.program, state: 'off'}]);
 				
 			  if(showconfig) {
 //		            let aentity = hass.states[config.program].attributes['show_config']
