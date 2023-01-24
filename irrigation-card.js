@@ -29,6 +29,15 @@ class IrrigationCard extends HTMLElement {
 	  let defentities = [];
 	  let validconfig = 'invalid';
 
+		let zones = Number(hass.states[config.program].attributes['zone_count']);
+		let last_run_zones = "";
+
+		let	runtimes = [];
+		let	zone_attrs = [];
+		let zfname = ""
+		let zname = ""
+
+ 
 	  const x = hass.states[config.program];
 	  if (!x) {
 		  config.card.title = 'ERR';
@@ -57,168 +66,284 @@ class IrrigationCard extends HTMLElement {
 		  let entities = []
 
 		  function add_button_service(p_service, p_name, p_action_name, p_data, p_conditions) {
-			entities.push({
-			  type: 'conditional',
-			  conditions: p_conditions,
-			  row:
-			    {
-				type: 'button',
-				name: p_name,
-				icon: 'mdi:power',
-				action_name: p_action_name,
-				tap_action:
-				  {
-				  action: 'call-service',
-				  service: p_service,
-				  service_data:
-				    p_data
-				  }
-				}
-			  });
-		  }
+				entities.push({
+					type: 'conditional',
+					conditions: p_conditions,
+					row:
+						{
+					type: 'button',
+					name: p_name,
+					icon: 'mdi:power',
+					action_name: p_action_name,
+					tap_action:
+						{
+						action: 'call-service',
+						service: p_service,
+						service_data:
+							p_data
+						}
+					}
+				});
+		  }//add_button_service
 
-
-		  function add_entity(p_entity) {
+		  function add_button_off(p_name, p_action_name, p_data, p_conditions) {
+				entities.push({
+					type: 'conditional',
+					conditions: p_conditions,
+					row:
+					{
+					type: 'button',
+					name: p_name,
+					icon: 'mdi:power',
+					action_name: p_action_name,
+					tap_action:
+						{
+						action: 'call-service',
+						service: 'switch.turn_off',
+						data: {},
+						target: {
+						  entity_id: p_data
+						}
+						}
+					}
+				});
+		  }//add_button_off
+			
+		  function add_entity(p_conditions, p_entity, array) {
 			  if(hass.states[config.program].attributes[p_entity]) {
-				  entities.push(hass.states[config.program].attributes[p_entity]);
-			  }
-		  }
-
-		  function add_conditional_entity(p_conditions, p_entity) {
-			  if(hass.states[config.program].attributes[p_entity]) {
-				  entities.push({ type: 'conditional',
+          if(p_conditions == null) {
+						array.push(hass.states[config.program].attributes[p_entity]);					
+				  } else {
+  				  array.push({ type: 'conditional',
 								  conditions: p_conditions,
 								  row: {entity: hass.states[config.program].attributes[p_entity]}
 							  });
+					}
 			  }
-		  }
+		  }//add_entity
 
-		  function add_attribute(p_attribute, p_name, p_icon, p_conditions) {
+		  function add_attribute(p_attribute, p_name, p_icon, p_conditions, array) {
 			  if(hass.states[config.program].attributes[p_attribute]) {
-                if(p_conditions == null) {
-    			  entities.push({ type: 'attribute',
+          if(p_conditions == null) {
+    			  array.push({ type: 'attribute',
 					  entity: config.program,
 					  attribute: p_attribute,
+						format: 'relative',
 					  name: p_name,
 					  icon: p_icon });
 			    } else {
-				  entities.push({ type: 'conditional',
+				  array.push({ type: 'conditional',
 								  conditions: p_conditions,
 								  row: {type: 'attribute',
 									  entity: config.program,
 									  attribute: p_attribute,
+										format: 'relative',
 									  name: p_name,
 									  icon: p_icon }
 							  });
 			    }
 			  }
-		  }
+		  }//add_attribute
 
-// run  program button
-		  add_button_service(
-			  'switch.turn_on',
-				hass.states[config.program].attributes['friendly_name'],
-				'RUN',
-				{
-				entity_id: config.program,
-				},
-				[{entity: config.program, state: 'off'}]
-			);
+			function attr_value(p_attribute) {
+				let attrvalue = null;
+				if (hass.states[config.program].attributes[p_attribute]) {
+					attrvalue = hass.states[config.program].attributes[p_attribute];
+				}
+				return attrvalue;
+			}//attr_value
+
+			function add_attr_value(p_attribute, array) {
+				if (attr_value(p_attribute)) {
+					if(showconfig) {
+						add_entity([{entity: showconfig, state: 'on'}],p_attribute,array);
+					} else{
+						add_entity(null, p_attribute, array)
+					}
+				}
+			}//add_attr_value
+
+
+			function ProcessZone(array) {
+				name = array[0].split(".")[1];
+				add_attribute( name + '_remaining',
+							hass.states['switch.'+name].attributes['friendly_name'],
+							'mdi:timer-outline',
+							[{entity: config.program, state: 'on'}],
+							runtimes
+							);
+				// list of other in order
+				add_attr_value(name + '_water', zone_attrs);
+ 			  add_attr_value(name + '_water_adjustment', zone_attrs);
+   			add_attr_value(name + '_flow_sensor', zone_attrs);
+				add_attr_value(name + '_wait', zone_attrs);
+				add_attr_value(name + '_repeat', zone_attrs);
+				add_attr_value(name + '_rain_sensor', zone_attrs);
+				add_attr_value(name + '_ignore_rain_sensor', zone_attrs);
+			} //ProcessZone
+
+			//check if two arrays are the same
+			const equalsCheck = (a, b) =>
+					a.length === b.length &&
+					a.every((v, i) => v === b[i]);
+
+			function ProcessGroup(array) {
+				// return true if the group is consistent
+				if (array.length == 0) return false;
+				let basezone = [];
+				for (var i = 0; i < array.length; i++) {
+					
+					name = array[i].split(".")[1];
+					
+					// list of other in order
+					let zone = [];
+					zone.push(hass.states[config.program].attributes[name + '_run_freq']);
+					zone.push(hass.states[config.program].attributes[name + '_water']);
+					zone.push(hass.states[config.program].attributes[name + '_water_adjustment']);
+					zone.push(hass.states[config.program].attributes[name + '_flow_sensor']);
+					zone.push(hass.states[config.program].attributes[name + '_wait']);
+					zone.push(hass.states[config.program].attributes[name + '_repeat']);
+					zone.push(hass.states[config.program].attributes[name + '_rain_sensor']);
+					zone.push(hass.states[config.program].attributes[name + '_ignore_rain_sensor']);
+
+					if (i == 0) {
+						basezone = zone;
+						continue;
+					}
+					if (equalsCheck(basezone,zone)) {
+						//we have a match move onto the next zone in the array
+						basezone = zone;
+					}else{
+						return false;
+					}
+				}
+				return true;
+			}	//ProcessGroup
 			
-		  add_button_service(
-				'switch.turn_off',
-				hass.states[config.program].attributes['friendly_name'],
-				'STOP',
-				{
-				entity_id: config.program,
-				},
-				[{entity: config.program, state: 'on'}]
-			);
-			add_attribute( 'remaining', ' ', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
-		  add_entity('show_config');
-//add the program level configuration use conditional if show config entity is provided
-          let showconfig = hass.states[config.program].attributes['show_config']
+			function getName(value, index, array) {
+				name = value.split(".")[1];
+				zfname += (hass.states[value].attributes['friendly_name'] + ", ");
+			} //getName
 
-			if(showconfig) {
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'start_time');
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'irrigation_on');
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'run_freq');
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'controller_monitor');
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'inter_zone_delay');
-				add_conditional_entity([{entity: showconfig, state: 'on'}],'zone_groups');
-			} else {
-				add_entity('start_time');
-				add_entity('irrigation_on');
-				add_entity('run_freq');
-				add_entity('controller_monitor');
-				add_entity('inter_zone_delay');
-				add_entity('zone_groups');
+			function ZoneHeader(zones,zname) {
+				// if this card instance is showing only zones
+				if (show_program === false) {
+					config.card.title = hass.states[config.program].attributes['friendly_name'];
+				} 
+				entities.push({ type: 'section',
+								label: ""
+							});
+				
+
+				zfname = "";
+				zones.forEach(getName);
+				zfname = zfname.substring(0, zfname.length-2);
+
+				add_button_service(
+					'irrigationprogram.run_zone',
+					zfname,
+					'RUN',
+					{
+					entity_id: config.program,
+					zone: zones,
+					},
+					[{entity: config.program, state: 'off'}]
+				);
+
+				add_button_off(
+					zfname,
+					'STOP',
+					zones,
+					[{entity: config.program, state: 'on'}]
+				);
+			
+				if(showconfig) {
+					add_attribute(zname + '_last_ran', ' ', 'mdi:clock', [{entity: showconfig, state: 'on'},{entity: config.program, state: 'off'}],entities);
+				} else {
+					add_attribute(zname + '_last_ran', ' ', 'mdi:clock', [{entity: config.program, state: 'off'}],entities);
+				}
+			} //ZoneHeader
+
+
+			// Build the Program level entities
+			let show_program = true
+			if (typeof config.show_program !== 'undefined') {
+				if (config.show_program === true) {
+					show_program = true;
+				} else {
+					show_program = false;
+				}
+			}
+			
+			let showconfig = hass.states[config.program].attributes['show_config'];
+					
+			if (show_program === true) {
+				add_button_service(
+					'switch.turn_on',
+					hass.states[config.program].attributes['friendly_name'],
+					'RUN',
+					{
+					entity_id: config.program,
+					},
+					[{entity: config.program, state: 'off'}]
+				);
+
+				add_button_service(
+					'switch.turn_off',
+					hass.states[config.program].attributes['friendly_name'],
+					'STOP',
+					{
+					entity_id: config.program,
+					},
+					[{entity: config.program, state: 'on'}]
+				);
+				add_attribute( 'remaining', ' ', 'mdi:timer-outline', [{entity: config.program, state: 'on'}],entities);
+				add_entity(null,'show_config',entities);
+
+				//add the program level configuration use conditional if show config entity is provided
+				add_attr_value('start_time',entities);
+				add_attr_value('irrigation_on',entities);
+				add_attr_value('run_freq',entities);
+				add_attr_value('controller_monitor',entities);
+				add_attr_value('inter_zone_delay',entities);
 			}
 
-		  let zones = Number(hass.states[config.program].attributes['zone_count'])
-							
-//add the entity level configuration use conditional if show config entity is provided
+			let dzones = [];
+      //add the entity level configuration use conditional if show config entity is provided
 		  for (let i = 1; i < zones + 1; i++) {
-
-			  let n = 1;
+					
 			  let zname = hass.states[config.program].attributes['zone' + String(i) + '_name'];
-			  let zfname = hass.states['switch.' + zname].attributes['friendly_name'];
-
-			  entities.push({ type: 'section',
-							  label: zfname
-						  });
-
-//show remaining time
-			  add_attribute( zname + '_remaining', ' ', 'mdi:timer-outline', [{entity: config.program, state: 'on'}]);
-// show last time zone ran
-			  if(showconfig) {
-					add_attribute( zname + '_last_ran', ' ', 'mdi:clock', [{entity: showconfig, state: 'on'}]);
-				} else {
-					add_attribute(zname + '_last_ran', ' ', 'mdi:clock', [{entity: config.program, state: 'off'}]);
+				if (config.entities) {
+					if (config.entities.length > 0) {
+						if ( config.entities.indexOf('switch.' + zname) == -1) {
+							continue;
+						}
+					}
 				}
 
-			  add_button_service(
-				'irrigationprogram.run_zone',
-				zfname,
-				'RUN',
-				{
-				entity_id: config.program,
-				zone: 'switch.' + zname,
-				},
-				[{entity: config.program, state: 'off'}]);
-				
-			  if(showconfig) {
-//		            let aentity = hass.states[config.program].attributes['show_config']
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_run_freq');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_zone_group');
-//***deprecate these
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_disable_zone');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_enable_zone');
-//**
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_water');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_water_adjustment');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_wait');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_repeat');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_rain_sensor');
-					add_conditional_entity([{entity: showconfig, state: 'on'}],zname + '_ignore_rain_sensor');
-				} else {
-					add_entity(zname + '_run_freq');
-					add_entity(zname + '_zone_group');
-//***deprecate these
-					add_entity(zname + '_disable_zone');
-					add_entity(zname + '_enable_zone');
-//**
-					add_entity(zname + '_water');
-					add_entity(zname + '_water_adjustment');
-					add_entity(zname + '_wait');
-					add_entity(zname + '_repeat');
-					add_entity(zname + '_rain_sensor');
-					add_entity(zname + '_ignore_rain_sensor');
+				let run_zones = ['switch.' + zname];				
+				if (hass.states[config.program].attributes[zname + '_group']) {
+					run_zones = hass.states[config.program].attributes[zname + '_group'];
 				}
 
-		  }
+				if (ProcessGroup(run_zones) === true) {
+					//same group skip to the next zone
+					if (equalsCheck(run_zones,last_run_zones)) continue;
+					dzones = run_zones;
+				} else {
+					dzones = ['switch.' + zname]
+				}
+				ZoneHeader(run_zones, zname)
+				runtimes = [];
+				zone_attrs = [];
+				ProcessZone(dzones);
+
+				const newentities = entities.concat(zone_attrs, runtimes);
+				entities = newentities;
+				last_run_zones = run_zones;
+			}
 		  return entities;
-	  }
+	  }//cardentities
 
 	  if (validconfig === 'valid') {
 		  config.card.entities = cardentities(hass, config.program);
