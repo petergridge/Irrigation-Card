@@ -11,6 +11,10 @@ This card works with [Irrigation Component](https://github.com/petergridge/Irrig
 HACS installation
 * Adding the repository using HACS is the simplest approach
 
+NOTE: If you are migrating from a manual installation:
+  * unregister the resource /local/irrigation_card.js
+  * delete irrigation_card.js from config/www
+
 Manual install
 * Ensure you have advanced mode enabled in Home Assistant
 * Copy irrigation-card.js to the /config/www directory in Home Assistant
