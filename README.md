@@ -34,7 +34,11 @@ Add the custom card
 
 **program:** (required) The switch representation of the irrigation program
 
-**title:** (optional) The title to be set in the card. defaults to the program freindly name
+**entities:** (optional) The list of entities to show on this card. If not provided all entities are displayed. This supports multiple cards being used for a single program
+
+**show_program:** (optional) False will result in the program information being omitted from the card
+
+**title:** (optional) The title to be set in the card.
 
 **icon:** (optional) An icon to display to the left of the title.
 
@@ -42,16 +46,27 @@ Add the custom card
 
 **header:** (optional) Header widget to render an image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
 
-**footer:** (optional) Header widget to render and image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
+**footer:** (optional) Header widget to render an image. See [header/footer documentation](https://www.home-assistant.io/lovelace/header-footer/).
 
 **Example:**
 ```yaml
 type: custom:irrigation-card
-program: switch.afternoon
 title: Afternoon Program
+program: switch.afternoon
+show_program: false
+entities:
+  - switch.zone1
+  - switch.zone2
 ```
 
 ## REVISION HISTORY
+### 5.2.0
+* Grouped zones as a single zone, if all helper entities are identical
+* Limit zones on card so multiple cards can be used to display a program
+* Allow program data to be excluded so multiple cards can be used to display a program
+* Provide relative time since the zone last ran
+* Provide program level runtime
+* Stopping a running zone will now only stop that zone, the program will continue
 ### 5.1.16
 * Reduce english content
 * correct friendly name usage
