@@ -34,9 +34,9 @@ class IrrigationCard extends HTMLElement {
 
 		let	runtimes = [];
 		let	zone_attrs = [];
-		let zfname = ""
-		let zname = ""
-
+		let zfname = "";
+		let zname = "";
+    let first_zone = null;
  
 	  const x = hass.states[config.program];
 	  if (!x) {
@@ -227,14 +227,15 @@ class IrrigationCard extends HTMLElement {
 			} //getName
 
 			function ZoneHeader(zones,zname) {
-				// if this card instance is showing only zones
-				if (show_program === false) {
-					config.card.title = hass.states[config.program].attributes['friendly_name'];
-				} 
-				entities.push({ type: 'section',
-								label: ""
+				// process zone/zonegroup main section
+				if (!config.show_program && first_zone && !config.title ) {
+					//do nothing
+				} else {
+						entities.push({ type: 'section',
+										label: ""
 							});
-				
+				}
+
 
 				zfname = "";
 				zones.forEach(getName);
@@ -246,7 +247,7 @@ class IrrigationCard extends HTMLElement {
 					'RUN',
 					{
 					entity_id: config.program,
-					zone: zones,
+					zone: zones.toString(),
 					},
 					[{entity: config.program, state: 'off'}]
 				);
@@ -311,6 +312,7 @@ class IrrigationCard extends HTMLElement {
 
 			let dzones = [];
       //add the entity level configuration use conditional if show config entity is provided
+			first_zone = true;
 		  for (let i = 1; i < zones + 1; i++) {
 					
 			  let zname = hass.states[config.program].attributes['zone' + String(i) + '_name'];
@@ -342,6 +344,8 @@ class IrrigationCard extends HTMLElement {
 				const newentities = entities.concat(zone_attrs, runtimes);
 				entities = newentities;
 				last_run_zones = run_zones;
+				first_zone = false;
+
 			}
 		  return entities;
 	  }//cardentities
@@ -362,7 +366,7 @@ class IrrigationCard extends HTMLElement {
 	}
   }
 
-  customElements.define('irrigation-card', IrrigationCard);
+  customElements.define('irrigation-card-test', IrrigationCard);
   window.customCards = window.customCards || [];
   window.customCards.push({
 	type: "irrigation-card",
