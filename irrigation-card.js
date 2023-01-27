@@ -228,14 +228,13 @@ class IrrigationCard extends HTMLElement {
 
 			function ZoneHeader(zones,zname) {
 				// process zone/zonegroup main section
-				if (!config.show_program && first_zone && !config.title ) {
+				if (config.show_program === false && first_zone && !config.title ) {
 					//do nothing
 				} else {
 						entities.push({ type: 'section',
 										label: ""
 							});
 				}
-
 
 				zfname = "";
 				zones.forEach(getName);
