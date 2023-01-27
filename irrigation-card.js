@@ -366,7 +366,7 @@ class IrrigationCard extends HTMLElement {
 	}
   }
 
-  customElements.define('irrigation-card-test', IrrigationCard);
+  customElements.define('irrigation-card', IrrigationCard);
   window.customCards = window.customCards || [];
   window.customCards.push({
 	type: "irrigation-card",
