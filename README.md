@@ -59,6 +59,33 @@ entities:
   - switch.zone1
   - switch.zone2
 ```
+**Card-Mod**
+
+Support for https://github.com/thomasloven/lovelace-card-mod.
+Allows you to apply CSS styles to various elements of the Home Assistant frontend.
+```
+card_mod:
+  style: |
+    ha-card {
+      background-image: url('/local/lawn.png'); 
+      background-repeat: no-repeat;
+      color: red;
+      --paper-item-icon-color: red;
+      --mdc-theme-primary: black;
+    }
+```
+ These are some examples, use F12 on Chrome to discover other style options. Please share any settings that you find and I will extend this documentation.
+ 
+* background-image: url('/local/lawn.png'); to set a background image
+* background-repeat: no-repeat; to prevent the image repeating to fill the card
+* color: red; set the general text color
+* --paper-item-icon-color: red; set the icon inactive color
+* --mdc-theme-primary: black; set the run button 
+* --paper-slider-active-color: red; change the slder color
+* --state-active-color: blue;
+* --state-switch-active-color: blue;
+* --mdc-select-fill-color: blue;
+
 
 ## REVISION HISTORY
 ### 5.2.0
@@ -68,6 +95,7 @@ entities:
 * Provide relative time since the zone last ran
 * Provide program level runtime
 * Stopping a running zone will now only stop that zone, the program will continue
+* Support Card Mod addon allowing custom backgroud and other style modifications.
 ### 5.1.16
 * Reduce english content
 * correct friendly name usage
