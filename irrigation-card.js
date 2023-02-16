@@ -11,8 +11,17 @@ class IrrigationCard extends HTMLElement {
 	  if (!cardConfig.card.type) cardConfig.card.type = 'entities';
 	  if (!cardConfig.entities_vars) cardConfig.entities_vars = { type: 'entity' };
 	  const element = document.createElement(`hui-${cardConfig.card.type}-card`);
-	  this.appendChild(element);
 	  this._config = JSON.parse(JSON.stringify(cardConfig));
+
+		customElements.whenDefined("card-mod").then(() => {
+    	customElements.get('card-mod').applyToElement(
+				element,
+				"card-mod-card",
+				this._config.card_mod.style
+			)
+		})
+
+	  this.appendChild(element);
 	}
 
 	set hass(hass) {
@@ -246,7 +255,7 @@ class IrrigationCard extends HTMLElement {
 					'RUN',
 					{
 					entity_id: config.program,
-					zone: zones.toString(),
+					zone: zones,
 					},
 					[{entity: config.program, state: 'off'}]
 				);
@@ -255,7 +264,7 @@ class IrrigationCard extends HTMLElement {
 					zfname,
 					'STOP',
 					zones,
-					[{entity: config.program, state: 'on'}]
+					[{entity: zones[0], state: 'on'}]
 				);
 			
 				if(showconfig) {
@@ -361,15 +370,16 @@ class IrrigationCard extends HTMLElement {
 	}
 
 	getCardSize() {
-	  return 'getCardSize' in this.lastChild ? this.lastChild.getCardSize() : 1;
+		return 'getCardSize' in this.lastChild ? this.lastChild.getCardSize() : 1;
 	}
-  }
+}
 
-  customElements.define('irrigation-card', IrrigationCard);
-  window.customCards = window.customCards || [];
-  window.customCards.push({
+
+customElements.define('irrigation-card', IrrigationCard);
+window.customCards = window.customCards || [];
+window.customCards.push({
 	type: "irrigation-card",
 	name: "Irrigation Card",
 	preview: true, // Optional - defaults to false
 	description: "Custom card companion to Irrigation Custom Component" // Optional
-  });
+});
