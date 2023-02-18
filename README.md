@@ -2,6 +2,7 @@
 
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
+
 # Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="30"/>
 
 This card works with [Irrigation Component](https://github.com/petergridge/Irrigation-V5) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, the card leverages the capabilities of the default entities card.
