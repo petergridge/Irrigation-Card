@@ -75,7 +75,7 @@ card_mod:
       --mdc-theme-primary: black;
     }
 ```
-These are some examples, use F12 on Chrome to discover other style options. My explanation of the action are not definitive the style change can affect other components as well. There are many more stype options available that will have an impact. Please share exampless and action for me to update this list.
+These are some examples, use F12 on Chrome to discover other style options. My explanation of the action are not definitive the style change can affect other components as well. There are many more style options available that will have an impact. Please share exampless and action for me to update this list.
  
 |example     |action   |
 |:---        |:---     |
