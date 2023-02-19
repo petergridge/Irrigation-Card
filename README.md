@@ -64,16 +64,15 @@ entities:
 
 Support for https://github.com/thomasloven/lovelace-card-mod.
 Allows you to apply CSS styles to various elements of the Home Assistant frontend.
+
+![image](https://user-images.githubusercontent.com/40281772/219922995-611c4fde-9f5f-48ba-8d5e-544149516704.png)
+
 ```
-card_mod:
   style: |
     ha-card {
-      background-image: url('/local/lawn.png'); 
-      background-repeat: no-repeat;
-      color: red;
-      --paper-item-icon-color: red;
+      background-image: url('/local/lawn.png');
       --mdc-theme-primary: black;
-    }
+      }
 ```
 These are some examples, use F12 on Chrome to discover other style options. My explanation of the action are not definitive the style change can affect other components as well. There are many more style options available that will have an impact. Please share exampless and action for me to update this list.
  
