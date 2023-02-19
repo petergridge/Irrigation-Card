@@ -74,6 +74,8 @@ Allows you to apply CSS styles to various elements of the Home Assistant fronten
       --mdc-theme-primary: black;
       }
 ```
+Note: /local/ is the path to the /config/www directory in you home assistant install.
+
 These are some examples, use F12 on Chrome to discover other style options. My explanation of the action are not definitive the style change can affect other components as well. There are many more style options available that will have an impact. Please share exampless and action for me to update this list.
  
 |example     |action   |
