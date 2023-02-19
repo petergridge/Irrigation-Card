@@ -75,17 +75,24 @@ card_mod:
       --mdc-theme-primary: black;
     }
 ```
- These are some examples, use F12 on Chrome to discover other style options. Please share any settings that you find and I will extend this documentation.
+These are some examples, use F12 on Chrome to discover other style options. My explanation of the action are not definitive the style change can affect other components as well. There are many more stype options available that will have an impact. Please share exampless and action for me to update this list.
  
-* background-image: url('/local/lawn.png'); to set a background image
-* background-repeat: no-repeat; to prevent the image repeating to fill the card
-* color: red; set the general text color
-* --paper-item-icon-color: red; set the icon inactive color
-* --mdc-theme-primary: black; set the run button 
-* --paper-slider-active-color: red; change the slder color
-* --state-active-color: blue;
-* --state-switch-active-color: blue;
-* --mdc-select-fill-color: blue;
+|example     |action   |
+|:---        |:---     |
+|background-image: url('/local/lawn.png');|to set a background image|
+|background-repeat: no-repeat; |to prevent the image repeating to fill the card|
+|color: red; |set the general text colour|
+|--state-active-color: blue;| change the colour of the input_boolean icon 'on' state|
+|--state-switch-active-color: blue;|change the colour of switch entity icons |
+|--paper-item-icon-color: red; |set the icon inactive 'off' state colour|
+|--mdc-theme-primary: black; |set the colour of the program run/stop text|
+|--paper-slider-active-color: red; |change the slider colour left of the knob|
+|--paper-slider-knob-color: red;| knob colour when the slider is not at the minimum value|
+|--paper-slider-knob-start-color: red;|Knob colour when the slider is at the minimum value|
+|--paper-slider-pin-color: red;|colour of the slider value callout|
+|--paper-slider-pin-start-color: red;|colour of the slider value callout when at the minimum value|
+|--paper-slider-container-color: red;|colour of the line to the right of the knob|
+
 
 
 ## REVISION HISTORY
