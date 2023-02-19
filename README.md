@@ -68,6 +68,12 @@ Allows you to apply CSS styles to various elements of the Home Assistant fronten
 ![image](https://user-images.githubusercontent.com/40281772/219922995-611c4fde-9f5f-48ba-8d5e-544149516704.png)
 
 ```
+type: custom:irrigation-card-test
+program: switch.test_irrigation
+entities:
+  - switch.dummy_2
+show_program: false
+card_mod:
   style: |
     ha-card {
       background-image: url('/local/lawn.png');
