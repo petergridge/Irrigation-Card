@@ -182,6 +182,7 @@ class IrrigationCard extends HTMLElement {
 							runtimes
 							);
 				// list of other in order
+				add_attr_value(name + '_enable_zone', zone_attrs);
 				add_attr_value(name + '_run_freq', zone_attrs);
 				add_attr_value(name + '_water', zone_attrs);
  			  add_attr_value(name + '_water_adjustment', zone_attrs);
