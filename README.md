@@ -38,7 +38,11 @@ Add the custom card
 
 **entities:** (optional) The list of entities to show on this card. If not provided all entities are displayed. This supports multiple cards being used for a single program
 
-**show_program:** (optional) False will result in the program information being omitted from the card
+**show_program:** (optional default true) false will result in the program information being omitted from the card
+
+**show_last_ran:** (optional default true) show/hide the last ran data element
+
+**show_next_run:** (optional default true) show/hide the next run data element
 
 **title:** (optional) The title to be set in the card.
 
@@ -100,9 +104,10 @@ These are some examples, use F12 on Chrome to discover other style options. My e
 |--paper-slider-pin-start-color: red;|colour of the slider value callout when at the minimum value|
 |--paper-slider-container-color: red;|colour of the line to the right of the knob|
 
-
-
 ## REVISION HISTORY
+### 5.2.1 - under development
+* add next run details
+* hide zone run option when the zone is disabled
 ### 5.2.0
 * Grouped zones as a single zone, if all helper entities are identical
 * Limit zones on card so multiple cards can be used to display a program
