@@ -3,6 +3,9 @@
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
 
+## New with version 5.2.3
+Added cummulative rain and snow to support [utility meter](https://www.home-assistant.io/integrations/utility_meter/), allows for better visualisation of daily, weekly and monthly precipitation statistices. 
+
 # Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="30"/>
 
 This card works with [Irrigation Component](https://github.com/petergridge/Irrigation-V5) and provides an interface reflecting the configuration of the irrigation custom component. Kudos to the HA team, the card leverages the capabilities of the default entities card.
@@ -105,9 +108,9 @@ These are some examples, use F12 on Chrome to discover other style options. My e
 |--paper-slider-container-color: red;|colour of the line to the right of the knob|
 
 ## REVISION HISTORY
-### 5.2.1 - under development
-* add next run details
-* hide zone run option when the zone is disabled
+### 5.2.3
+* Add next run details
+* Hide zone run option when the zone is disabled
 ### 5.2.0
 * Grouped zones as a single zone, if all helper entities are identical
 * Limit zones on card so multiple cards can be used to display a program
