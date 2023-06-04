@@ -4,7 +4,7 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
 
 ## New with version 5.2.3
-Added cummulative rain and snow to support [utility meter](https://www.home-assistant.io/integrations/utility_meter/), allows for better visualisation of daily, weekly and monthly precipitation statistices. 
+Added cummulative rain and snow to support [utility meter](https://www.home-assistant.io/integrations/utility_meter/), allows for better visualisation of daily, weekly and monthly precipitation statistics. 
 
 # Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="30"/>
 
