@@ -251,7 +251,7 @@ class IrrigationCard extends HTMLElement {
 			    filter.push({entity: hass.states[config.program].attributes[name + '_enable_zone'], state_not: onoff});
 			  }
 			  if (hass.states[config.program].attributes['irrigation_on']) {
-			    filter.push({entity: hass.states[config.program].attributes[name + 'irrigation_on'], state_not: onoff});
+			    filter.push({entity: hass.states[config.program].attributes['irrigation_on'], state_not: onoff});
 			  }
 				return filter
 			}
