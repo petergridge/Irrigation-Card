@@ -236,7 +236,32 @@ class IrrigationCard extends HTMLElement {
 				zfname += (hass.states[value].attributes['friendly_name'] + ", ");
 			} //getName
 
+			function filter(onoff) {
+			  // build the filter for the run button
+				const filter = [{entity: config.program, state: 'off'}];
+			  if (hass.states[config.program].attributes[zname + '_run_freq']) {
+			    filter.push({entity: hass.states[config.program].attributes[zname + '_run_freq'], state_not: onoff});
+			  }
+			  if (!hass.states[config.program].attributes[zname + '_run_freq']) {
+					if (hass.states[config.program].attributes['run_freq']) {
+						filter.push({entity: hass.states[config.program].attributes['run_freq'], state_not: onoff});
+					}
+			  }
+			  if (hass.states[config.program].attributes[name + '_enable_zone']) {
+			    filter.push({entity: hass.states[config.program].attributes[name + '_enable_zone'], state_not: onoff});
+			  }
+			  if (hass.states[config.program].attributes['irrigation_on']) {
+			    filter.push({entity: hass.states[config.program].attributes[name + 'irrigation_on'], state_not: onoff});
+			  }
+				return filter
+			}
+			
 			function ZoneHeader(zones,zname) {
+
+				zfname = "";
+				zones.forEach(getName);
+				zfname = zfname.substring(0, zfname.length-2);
+
 				// process zone/zonegroup main section
 				if (config.show_program === false && first_zone && !config.title ) {
 					//do nothing
@@ -246,26 +271,6 @@ class IrrigationCard extends HTMLElement {
 							});
 				}
 
-				zfname = "";
-				zones.forEach(getName);
-				zfname = zfname.substring(0, zfname.length-2);
-				const filter = [{entity: config.program, state: 'off'}];
-			// build the filter for the run button
-			  if (hass.states[config.program].attributes[zname + '_run_freq']) {
-			    filter.push({entity: hass.states[config.program].attributes[zname + '_run_freq'], state_not: 'off'});
-			  }
-			  if (!hass.states[config.program].attributes[zname + '_run_freq']) {
-					if (hass.states[config.program].attributes['run_freq']) {
-						filter.push({entity: hass.states[config.program].attributes['run_freq'], state_not: 'off'});
-					}
-			  }
-			  if (hass.states[config.program].attributes[name + '_enable_zone']) {
-			    filter.push({entity: hass.states[config.program].attributes[name + '_enable_zone'], state_not: 'off'});
-			  }
-			  if (hass.states[config.program].attributes['irrigation_on']) {
-			    filter.push({entity: hass.states[config.program].attributes[name + 'irrigation_on'], state_not: 'off'});
-			  }
-
 				add_button_service(
 					'irrigationprogram.run_zone',
 					zfname,
@@ -274,7 +279,17 @@ class IrrigationCard extends HTMLElement {
 					entity_id: config.program,
 					zone: zones,
 					},
-					filter
+					filter('off')
+				);
+				add_button_service(
+					'zone.reload',
+					zfname,
+					' ',
+					{
+					entity_id: config.program,
+					zone: zones,
+					},
+					filter('on')
 				);
 
 				add_button_off(
@@ -412,6 +427,8 @@ class IrrigationCard extends HTMLElement {
 		return 'getCardSize' in this.lastChild ? this.lastChild.getCardSize() : 1;
 	}
 }
+
+
 
 customElements.define('irrigation-card', IrrigationCard);
 window.customCards = window.customCards || [];
