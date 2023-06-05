@@ -293,7 +293,7 @@ class IrrigationCard extends HTMLElement {
 					entity_id: config.program,
 					zone: zones,
 					},
-					filter('ofn',zname),			
+					filter('on',zname),			
 				);
 
 				add_button_off(
