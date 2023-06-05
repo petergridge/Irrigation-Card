@@ -305,12 +305,7 @@ class IrrigationCard extends HTMLElement {
           },
           filter("off", zname)
         );
-        const filteroff = [
-          {
-            entity: hass.states[config.program].attributes[zname + "_next_run"],
-            state: "off",
-          },
-        ];
+
         add_button_service(
           "zone.reload",
           zfname,
@@ -319,7 +314,7 @@ class IrrigationCard extends HTMLElement {
             entity_id: config.program,
             zone: zones,
           },
-          filter("off", zname)
+          filter("on", zname)
         );
 
         add_button_off(zfname, "STOP", zones, [
