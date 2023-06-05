@@ -42,6 +42,7 @@ class IrrigationCard extends HTMLElement {
     let runtimes = [];
     let zone_attrs = [];
     let zfname = "";
+    let zname = "";
     let first_zone = null;
 
     const x = hass.states[config.program];
@@ -306,6 +307,12 @@ class IrrigationCard extends HTMLElement {
           filter("off", zname)
         );
 
+        const filteroff = [
+          {
+            entity: hass.states[config.program].attributes[zname + "_next_run"],
+            state: "off",
+          },
+        ];
         add_button_service(
           "zone.reload",
           zfname,
@@ -412,6 +419,7 @@ class IrrigationCard extends HTMLElement {
           },
           [{ entity: config.program, state: "on" }]
         );
+
         add_attribute(
           "remaining",
           " ",
