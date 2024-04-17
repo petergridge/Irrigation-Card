@@ -3,9 +3,8 @@
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
 
-# This repository has been discontinued. The Custom Card is now deployed with the Custom Component this ensures that the version of the card is always in sync with the component.
-
-
+# This repository revived as the install with the custom component no longer works.
+## Current with version 5.4.9 of the custom component
 ## New with version 5.2.3
 * Add next run details
 * Hide zone run option when the zone is disabled
