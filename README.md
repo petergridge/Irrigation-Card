@@ -5,6 +5,8 @@
 
 # This repository revived as the install with the custom component no longer works.
 ## Current with version 5.4.9 of the custom component
+* I have not updated the text blow yet, sorry
+
 ## New with version 5.2.3
 * Add next run details
 * Hide zone run option when the zone is disabled
