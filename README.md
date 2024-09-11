@@ -3,9 +3,10 @@
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
 
-# This repository revived as the install with the custom component no longer works.
-## Current with version 5.4.9 of the custom component
-* I have not updated the text blow yet, sorry
+# This repository revived as some installations do not successfully implement the card with the custom component.
+# Do not install this unless the default card is not working.
+## Current with version 5.4.20 of the custom component
+* I have not updated the text below yet, sorry
 
 ## New with version 5.2.3
 * Add next run details
