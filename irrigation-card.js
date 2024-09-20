@@ -36,6 +36,8 @@ class IrrigationCard extends HTMLElement {
 
     let zones = Number(hass.states[config.program].attributes["zone_count"]);
 
+    console.log("editor:constructor()");
+
     const x = hass.states[config.program];
     if (!x) {
       config.card.title = "ERR";
@@ -60,10 +62,9 @@ class IrrigationCard extends HTMLElement {
       }
     }
 
-    function cardentities(hass, program) {
+    function cardentities(hass) {
       function addZoneRunConfigButtons(p_zone, p_config) {
         var zone_name = hass.states[p_zone].attributes["friendly_name"];
-//        var zone_name = "test";
         var buttons = [];
         buttons[0] = {
           entity: p_zone,
@@ -129,7 +130,9 @@ class IrrigationCard extends HTMLElement {
           array.push({
             type: "conditional",
             conditions: p_conditions,
-            row: { entity: hass.states[config.program].attributes[p_entity] },
+            row: {
+              entity: hass.states[config.program].attributes[p_entity]
+            },
           });
         }
       } //add_entity
@@ -169,9 +172,6 @@ class IrrigationCard extends HTMLElement {
       function ProcessZone(zone, zone_attrs) {
         let pname = zone.split(".")[1];
         let showconfig = hass.states[config.program].attributes[pname + "_show_config"];
-        //let zonestatus =
-        //  hass.states[config.program].attributes[parentname + "_status"];
-
         // list of other in order
         add_attr_value(pname + "_enable_zone", zone_attrs,showconfig);
         add_attr_value(pname + "_run_freq", zone_attrs, showconfig);
@@ -187,49 +187,43 @@ class IrrigationCard extends HTMLElement {
 
       function ZoneHeader(zone, zone_name, first_zone) {
 
-        let name = zone.split(".")[1];
         // process zone/zonegroup main section
-        let zonestatus =
-          hass.states[config.program].attributes[zone_name + "_status"];
+        let showconfig =
+          hass.states[config.program].attributes[zone_name + "_show_config"];
+
         if (config.show_program === false && first_zone && !config.title) {
           //do nothing
         } else {
           entities.push({ type: "section", label: "" });
         }
 
-        let showconfig =
-          hass.states[config.program].attributes[zone_name + "_show_config"];
         addZoneRunConfigButtons(zone, showconfig);
+        // Next/Last run details
+        let zonestatus =
+          hass.states[config.program].attributes[zone_name + "_status"];
 
-        // var llocale = window.navigator.userLanguage || window.navigator.language;
-        // if (config.hass_lang_priority) {
-        //   llocale = this.myhass.language;
-        // }
-        // var translationJSONobj = null;
+        entities.push({
+          type: "conditional",
+          conditions: [
+            { entity: zonestatus, state_not: ["off", "on", "pending", "eco"] }
+          ],
+          row: {
+            entity: zonestatus,
+            name: config.next_run_label || "Next Run",
+            icon: "mdi:alert-outline"
+          },
+        });
 
-        // var translationLocal = "/local/" + llocale.substring(0, 2) + ".json";
-        // var rawFile = new XMLHttpRequest();
-        // rawFile.overrideMimeType("application/json");
-        // rawFile.open("GET", translationLocal, false);
-        // rawFile.send(null);
-        // if (rawFile.status == 200) {
-        //   translationJSONobj = JSON.parse(rawFile.responseText);
-        // } else {
-        //   // if no language file found, default to en
-        //   translationLocal = "/local/en.json";
-        //   rawFile.open("GET", translationLocal, false);
-        //   rawFile.send(null);
-        //   if (rawFile.status == 200) {
-        //     translationJSONobj = JSON.parse(rawFile.responseText);
-        //   } else {
-        //     translationJSONobj = null;
-        //   }
-        // }
-
-        // var remaining_lable = "remaining"
-        // if (typeof translationJSONobj != null) {
-        //    remaining_lable = translationJSONobj.other['remaining'] + " ";
-        // }
+        add_attribute(
+          zone_name + "_next_run",
+          config.next_run_label || "Next Run",
+          "mdi:clock-start",
+          [
+            { entity: zonestatus, state: ["off"]
+            },
+          ],
+          entities
+        );
 
         // Show the remaining time when on/eco/pending
         add_attribute(
@@ -237,37 +231,7 @@ class IrrigationCard extends HTMLElement {
           config.remaining_label || "Remaining Time",
           "mdi:timer-outline",
           [
-            { entity: zonestatus, state: "on" },
-          ],
-          entities
-        );
-        add_attribute(
-          zone_name + "_remaining",
-          config.remaining_label || "Remaining Time",
-          "mdi:timer-outline",
-          [
-            { entity: zonestatus, state: "pending" },
-          ],
-          entities
-        );
-        add_attribute(
-          zone_name + "_remaining",
-          config.remaining_label || "Remaining Time",
-          "mdi:timer-outline",
-          [
-            { entity: zonestatus, state: "eco" },
-          ],
-          entities
-        );
-        // Next/Last run details
-        add_attribute(
-          zone_name + "_next_run",
-          config.next_run_label || "Next Run",
-          "mdi:clock-start",
-          [
-            { entity: zonestatus, state_not: "on" },
-            { entity: zonestatus, state_not: "eco" },
-            { entity: zonestatus, state_not: "pending" },
+            { entity: zonestatus, state: ["on","eco","pending"]},
           ],
           entities
         );
@@ -277,9 +241,7 @@ class IrrigationCard extends HTMLElement {
           config.last_ran_label || "Last Ran",
           "mdi:clock-end",
           [
-            { entity: zonestatus, state_not: "on" },
-            { entity: zonestatus, state_not: "eco" },
-            { entity: zonestatus, state_not: "pending" },
+            { entity: zonestatus, state_not: ["on","eco","pending"] },
             { entity: showconfig, state: "on" },
           ],
           entities
@@ -334,7 +296,7 @@ class IrrigationCard extends HTMLElement {
     } //cardentities
 
     if (validconfig === "valid") {
-      config.card.entities = cardentities(hass, config.program);
+      config.card.entities = cardentities(hass);
     } else {
       config.card.entities = defentities;
     }
@@ -409,9 +371,6 @@ class IrrigationCardEditor extends HTMLElement {
 			<div class="row"><label class="label" for="remaining_label">Remaining label:</label><input type="text" id="remaining_label" defaultValue='Remaining time'></input></div>
 			`;
   }
-//<div class="row"><label class="label" for="debug">debug:</label><input type="text" id="debug"></input></div>
-//this._elements.debug.value = select.value;
-
 
   doStyle() {
     this._elements.style = document.createElement("style");
@@ -445,9 +404,6 @@ class IrrigationCardEditor extends HTMLElement {
       this._elements.editor.querySelector("#next_run_label");
     this._elements.remaining_label =
       this._elements.editor.querySelector("#remaining_label");
-
-//		this._elements.debug =
-//     this._elements.editor.querySelector("#debug");
   }
 
   doListen() {
@@ -524,9 +480,9 @@ class IrrigationCardEditor extends HTMLElement {
     for (i = 1; i < zones + 1; i++) {
 
       let _zone_name =
-      hass.states[config.program].attributes["zone_" + String(i) + "_name"];
+      this._hass.states[this._config.program].attributes["zone_" + String(i) + "_name"];
       let _zone_type =
-      hass.states[config.program].attributes["zone_" + String(i) + "_type"];
+      this._hass.states[this._config.program].attributes[_zone_name + "_type"];
 
       var zone_name = _zone_type + "." + _zone_name;
       let newOption = new Option(zone_name, zone_name);
