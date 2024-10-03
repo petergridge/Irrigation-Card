@@ -3,14 +3,19 @@
 ![GitHub Workflow Status (with branch)](https://img.shields.io/github/actions/workflow/status/petergridge/Irrigation-Card/hacs-validate.yml?branch=main&label=HACS)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/petergridge/Irrigation-Card/latest/total)
 
-# This repository revived as some installations do not successfully implement the card with the custom component.
+# To remove this card and revert to the auto installed version follow this process.
+* Delete the custom card and the HACS repository from your installation.
+* Ensure the hacsfiles/irrigation-card/... resource is removed, delete it if required
+* Upgrade to the latest version of the component V2024.10.01
+* Restart HA
+* Refresh the browser (you may need to clear the browser cache)
+* Add the card to your HA Dashboard
+* The card will be upgraded with each install of the component.
+
 # Do not install this unless the default card is not working.
-## Current with version 5.4.20 of the custom component
+## Current with version 2024.10.01 of the custom component
 * I have not updated the text below yet, sorry
 
-## New with version 5.2.3
-* Add next run details
-* Hide zone run option when the zone is disabled
 
 # Custom Card for Irrigation Component <img src="https://github.com/petergridge/irrigation-card/blob/main/icon.png" alt="drawing" width="30"/>
 
